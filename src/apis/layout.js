@@ -25,3 +25,7 @@ export const getNewAPI = () => {
 export const getHotAPI = () => {
   return  instance.get('home/hot')
 }
+
+export const getGoodsProductAPI = () => {
+  return instance.get(`/home/goods`)
+}
