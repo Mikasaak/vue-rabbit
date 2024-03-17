@@ -39,6 +39,7 @@ const layoutStore =useLayoutStore()
   height: 500px;
   background: rgba(0, 0, 0, 0.8);
   position: relative;
+  float: left;
   z-index: 99;
 
   .menu {
