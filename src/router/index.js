@@ -11,8 +11,20 @@ const router = createRouter({
           path: '',
           component: () => import('@/views/Layout/Home/Home.vue'),
         }, {
-          path: 'Category/:id',
-          component: () => import('@/views/Layout/Category/Category.vue'),}],
+          path: 'category/:id',
+          component: () => import('@/views/Layout/Category/Category.vue'),
+          children: [
+            {
+              path: '',
+              component: () => import('@/views/Layout/Category/MainCategory/MainCategory.vue'),
+            },
+            {
+              path: 'sub/:subid',
+              component: () => import('@/views/Layout/Category/SubCategory/SubCategory.vue'),
+            },
+          ],
+        }],
+
     },
     {
       path: '/login',

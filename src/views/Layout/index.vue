@@ -9,6 +9,6 @@ import LayoutFixed from '@/views/Layout/components/LayoutFixed.vue';
   <LayoutFixed />
   <LayoutNav />
   <LayoutHeader />
-  <RouterView></RouterView>
+  <RouterView ></RouterView>
   <LayoutFooter />
 </template>
