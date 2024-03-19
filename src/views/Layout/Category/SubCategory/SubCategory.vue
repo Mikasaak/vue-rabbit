@@ -1,26 +1,67 @@
 <script setup>
+import {ref, onMounted} from 'vue';
+import {useRoute} from 'vue-router';
+import {getSubCategoryAPI} from '@/apis/category.js';
+import GoodsItem from '@/views/Layout/Home/comment/GoodsItem.vue';
+
+const route = useRoute();
+const goodList = ref([]);
+const reqData = ref({
+  categoryId: route.params.id,
+  page: 1,
+  pageSize: 20,
+  sortField: 'publishTime',
+});
+
+const getGoodList = async () => {
+  const res = await getSubCategoryAPI(reqData.value);
+  console.log(res);
+  goodList.value = res.data.result.items;
+};
+
+onMounted(() => {
+      getGoodList();
+    },
+);
 
 
+// 加载更多
+const isLoading = ref(false);
+const disabled = ref(false);
+const load = async ()=>{
+  if (isLoading.value) return;
+  isLoading.value = true;
+  reqData.value.page++;
+  const res = await getSubCategoryAPI(reqData.value);
+  if (res.data.result.items.length === 0) {
+    isLoading.value = true;
+    disabled.value = true;
+    return;
+  }
+  goodList.value = [...goodList.value,...res.data.result.items];
+  isLoading.value = false;
+}
 </script>
 
 <template>
   <div class="container ">
     <div class="sub-container">
-      <el-tabs>
+      <el-tabs v-model="reqData.sortField" @tab-change="()=>{
+        reqData.page = 1;
+        getGoodList();
+      }">
         <el-tab-pane label="最新商品" name="publishTime"></el-tab-pane>
         <el-tab-pane label="最高人气" name="orderNum"></el-tab-pane>
         <el-tab-pane label="评论最多" name="evaluateNum"></el-tab-pane>
       </el-tabs>
-      <div class="body">
+      <div class="body" v-infinite-scroll="load" :infinite-scroll-disabled="disabled">
         <!-- 商品列表-->
-
-
+        <GoodsItem v-for="item in goodList" :good="item" :key="item.id"></GoodsItem>
       </div>
     </div>
   </div>
 
 </template>
-
 
 
 <style lang="scss" scoped>
