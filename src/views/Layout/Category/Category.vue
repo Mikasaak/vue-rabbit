@@ -47,7 +47,7 @@ onBeforeRouteUpdate((to, from, next) => {
         <h3 @click="$emit('update:categoryData',1)">全部分类</h3>
         <ul>
           <li v-for="i in categoryData.children" :key="i.id">
-            <RouterLink :to="`/subCategory/${i.id}`">
+            <RouterLink :to="`/category/sub/${i.id}`">
               <img :src="i.picture" />
               <p>{{ i.name }}</p>
             </RouterLink>
