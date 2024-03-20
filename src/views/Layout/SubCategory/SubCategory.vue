@@ -3,6 +3,8 @@ import {ref, onMounted} from 'vue';
 import {useRoute} from 'vue-router';
 import {getSubCategoryAPI} from '@/apis/category.js';
 import GoodsItem from '@/views/Layout/Home/comment/GoodsItem.vue';
+import { getCategoryFilterAPI } from '@/apis/category'
+
 
 const route = useRoute();
 const goodList = ref([]);
@@ -12,6 +14,18 @@ const reqData = ref({
   pageSize: 20,
   sortField: 'publishTime',
 });
+// 获取面包屑导航数据
+const filterData = ref({})
+const getFilterData = async () => {
+  const res = await getCategoryFilterAPI(route.params.id)
+  filterData.value = res.data.result
+  console.log(res)
+}
+getFilterData()
+
+
+
+
 
 const getGoodList = async () => {
   const res = await getSubCategoryAPI(reqData.value);
@@ -45,6 +59,14 @@ const load = async ()=>{
 
 <template>
   <div class="container ">
+    <div class="bread-container">
+      <el-breadcrumb separator=">">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: `/category/${filterData.parentId}` }">{{ filterData.parentName }}
+        </el-breadcrumb-item>
+        <el-breadcrumb-item>{{ filterData.name }}</el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
     <div class="sub-container">
       <el-tabs v-model="reqData.sortField" @tab-change="()=>{
         reqData.page = 1;
@@ -60,7 +82,6 @@ const load = async ()=>{
       </div>
     </div>
   </div>
-
 </template>
 
 

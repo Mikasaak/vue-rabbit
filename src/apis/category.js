@@ -22,6 +22,8 @@ export const getCategoryFilterAPI = (id) => {
  pageSize: 20,
  sortField: 'publishTime' | 'orderNum' | 'evaluateNum'
  }
+
+
  * @return {*}
  */
 export const getSubCategoryAPI = (data) => {

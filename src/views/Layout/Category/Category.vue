@@ -1,23 +1,31 @@
 <script setup>
-import { ref } from 'vue'
-import { useRoute } from 'vue-router'
-import { watch } from 'vue'
-import {getCategoryFilterAPI} from '@/apis/category.js';
+import MainBanner from '@/views/Layout/comment/MainBanner.vue';
+import GoodsItem from '@/views/Layout/Home/comment/GoodsItem.vue';
+import {onBeforeRouteUpdate, useRoute} from "vue-router";
+import {onMounted, ref} from "vue";
+import {useCategoryStore} from "@/stores/Category.js";
+import {getTopCategoryAPI} from "@/apis/category.js";
 
 
-const categoryData = ref({})
+const route = useRoute();
+const categoryData = ref({});
+const categoryStore = useCategoryStore()
+const getCategoryDate = async (id = route.params.id) => {
+  const res = await getTopCategoryAPI(id);
+  categoryData.value = res.data.result;
+};
 
-const route = useRoute()
-let findItem = ref({})
-const setCategoryData = (data) => {
-  categoryData.value = data
-  console.log("categoryData", data);
-}
-watch(() => route.params.subid, async (newVal) => {
-  const res = await getCategoryFilterAPI(newVal)
-  findItem.value = res.data.result
-  console.log("findItem", findItem.value);
-})
+
+onMounted(() => {
+  getCategoryDate();
+});
+
+onBeforeRouteUpdate((to, from, next) => {
+  getCategoryDate(to.params.id);
+  console.log(to);
+  next();
+});
+
 
 </script>
 
@@ -32,12 +40,31 @@ watch(() => route.params.subid, async (newVal) => {
           <el-breadcrumb-item v-if="$route.params.hasOwnProperty('subid')">{{findItem.name}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <RouterView @update:categoryData = setCategoryData></RouterView>
+      <!--轮播图-->
+      <MainBanner :bannerImgList="categoryStore.bannerImgList"></MainBanner>
+      <!-- 子分类 -->
+      <div class="sub-list">
+        <h3 @click="$emit('update:categoryData',1)">全部分类</h3>
+        <ul>
+          <li v-for="i in categoryData.children" :key="i.id">
+            <RouterLink :to="`/subCategory/${i.id}`">
+              <img :src="i.picture" />
+              <p>{{ i.name }}</p>
+            </RouterLink>
+          </li>
+        </ul>
+      </div>
+      <div class="ref-goods" v-for="item in categoryData.children" :key="item.id">
+        <div class="head">
+          <h3>- {{ item.name }}-</h3>
+        </div>
+        <div class="body">
+          <GoodsItem v-for="good in item.goods" :good="good" :key="good.id" />
+        </div>
+      </div>
     </div>
   </div>
-
 </template>
-
 
 <style scoped lang="scss">
 .top-category {
@@ -49,8 +76,73 @@ watch(() => route.params.subid, async (newVal) => {
     line-height: 100px;
   }
 
+  .sub-list {
+    margin-top: 20px;
+    background-color: #fff;
+
+    ul {
+      display: flex;
+      padding: 0 32px;
+      flex-wrap: wrap;
+
+      li {
+        width: 168px;
+        height: 160px;
+
+
+        a {
+          text-align: center;
+          display: block;
+          font-size: 16px;
+
+          img {
+            width: 100px;
+            height: 100px;
+          }
+
+          p {
+            line-height: 40px;
+          }
+
+          &:hover {
+            color: $xtxColor;
+          }
+        }
+      }
+    }
+  }
+
+  .ref-goods {
+    background-color: #fff;
+    margin-top: 20px;
+    position: relative;
+
+    .head {
+      .xtx-more {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      .tag {
+        text-align: center;
+        color: #999;
+        font-size: 20px;
+        position: relative;
+        top: -20px;
+      }
+    }
+
+    .body {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 40px 30px;
+    }
+  }
+
   .bread-container {
     padding: 25px 0;
   }
 }
 </style>
+
