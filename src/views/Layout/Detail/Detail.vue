@@ -2,6 +2,7 @@
 import {ref, onMounted} from 'vue'
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 import {getGoodsDetailAPI} from '@/apis/detail.js'
+import DetailHot from "@/views/Layout/Detail/components/DetailHot.vue";
 
 const route = useRoute()
 const goodsDetail = ref({})
@@ -127,7 +128,8 @@ onBeforeRouteUpdate(() => {
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
-
+              <DetailHot :hop-type="1"></DetailHot>
+              <DetailHot :hop-type="2"></DetailHot>
             </div>
           </div>
         </div>
