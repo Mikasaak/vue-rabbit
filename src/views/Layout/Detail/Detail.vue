@@ -3,6 +3,7 @@ import {ref, onMounted} from 'vue'
 import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 import {getGoodsDetailAPI} from '@/apis/detail.js'
 import DetailHot from "@/views/Layout/Detail/components/DetailHot.vue";
+import ImageView from "@/views/Layout/Detail/components/ImageView.vue";
 
 const route = useRoute()
 const goodsDetail = ref({})
@@ -44,6 +45,8 @@ onBeforeRouteUpdate(() => {
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
+
+              <ImageView></ImageView>
 
               <!-- 统计数量 -->
               <ul class="goods-sales">
