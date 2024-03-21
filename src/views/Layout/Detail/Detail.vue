@@ -46,12 +46,12 @@ onBeforeRouteUpdate(() => {
             <div class="media">
               <!-- 图片预览区 -->
 
-              <ImageView></ImageView>
+              <ImageView :image-list="goodsDetail.mainPictures"></ImageView>
 
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
-                  <p>销量人气</p>
+                  <p>销量人气</p>Pictures
                   <p> {{ goodsDetail.salesCount }}+ </p>
                   <p><i class="iconfont icon-task-filling"></i>销量人气</p>
                 </li>
