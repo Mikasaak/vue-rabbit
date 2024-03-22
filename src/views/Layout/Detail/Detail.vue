@@ -4,6 +4,7 @@ import {onBeforeRouteUpdate, useRoute} from 'vue-router'
 import {getGoodsDetailAPI} from '@/apis/detail.js'
 import DetailHot from "@/views/Layout/Detail/components/DetailHot.vue";
 import ImageView from "@/views/Layout/Detail/components/ImageView.vue";
+import XtxGoodSku from "@/components/XtxSku/index.vue";
 
 const route = useRoute()
 const goodsDetail = ref({})
@@ -21,6 +22,10 @@ onBeforeRouteUpdate(() => {
   getGoodsDetail(route.params.id)
 })
 
+
+const skuOnChange = (arg)=>{
+  console.log('arg',arg)
+}
 
 </script>
 
@@ -97,6 +102,7 @@ onBeforeRouteUpdate(() => {
               </div>
               <!-- sku组件 -->
 
+              <XtxGoodSku :goods="goodsDetail" @change="skuOnChange" ></XtxGoodSku>
               <!-- 数据组件 -->
 
               <!-- 按钮组件 -->
