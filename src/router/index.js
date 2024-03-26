@@ -1,7 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router';
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    // history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory(),
+    // history: createWebHashHistory(),
+
     routes: [
         {
             path: '/',
@@ -16,12 +19,16 @@ const router = createRouter({
                     component: () => import('@/views/Layout/Category/Category.vue'),
                 },
                 {
-                    path:'/category/sub/:id',
+                    path:'category/sub/:id',
                     component: () => import('@/views/Layout/SubCategory/SubCategory.vue'),
                 },
                 {
                     path: 'detail/:id',
                     component: () => import('@/views/Layout/Detail/Detail.vue'),
+                },
+                {
+                    path: 'cartlist',
+                    component: () => import('@/views/Layout/CartList/CartList.vue'),
                 }
             ],
 
