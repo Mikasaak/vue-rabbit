@@ -35,6 +35,17 @@ export const changeCartGoodsAPI = ({selected,count}, id) => {
 
 /**
  *
+ * @param selected
+ * @param {Array} ids
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export const changeAllSelectedAPI = (selected,ids) => {
+    return instance.put(`/member/cart/selected`, {selected,ids});
+}
+
+
+/**
+ *
  * @param {Array} ids
  * @param {string} ids[i]
  * @returns {Promise<axios.AxiosResponse<any>>}

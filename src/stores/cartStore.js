@@ -1,7 +1,14 @@
 import {defineStore} from "pinia";
 import {ref, computed} from "vue";
 import {useUserStore} from "@/stores/useStorer.js";
-import {addCartAPI, changeCartGoodsAPI, deleteCartAPI, getCartListAPI, margeCartListAPI} from "@/apis/cart.js";
+import {
+    addCartAPI,
+    changeAllSelectedAPI,
+    changeCartGoodsAPI,
+    deleteCartAPI,
+    getCartListAPI,
+    margeCartListAPI
+} from "@/apis/cart.js";
 
 export const useCartStore = defineStore(
     'cart',
@@ -125,8 +132,14 @@ export const useCartStore = defineStore(
             get() {
                 return cartList.value.every(item => item.selected)
             },
-            set(value) {
-                cartList.value.forEach(item => item.selected = value)
+            async set(value) {
+                if (userStore.isLogin) {
+                    const res = await changeAllSelectedAPI(value, cartList.value.map(item => item.skuId))
+                    console.log('isAllSelected', res)
+                    getCartList()
+                }else {
+                    cartList.value.forEach(item => item.selected = value)
+                }
             }
         })
         return {
