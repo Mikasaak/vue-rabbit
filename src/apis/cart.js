@@ -28,7 +28,7 @@ export const addCartAPI = ({skuId,count}) => {
  * @param {string}id 商品sku的id(不是商品id)
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-export const changeCartCountAPI = ({selected,count},id) => {
+export const changeCartGoodsAPI = ({selected,count}, id) => {
     return instance.put(`/member/cart/${id}`, {selected,count});
 }
 

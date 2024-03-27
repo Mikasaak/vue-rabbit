@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import {ref, computed} from "vue";
 import {useUserStore} from "@/stores/useStorer.js";
-import {addCartAPI, deleteCartAPI, getCartListAPI, margeCartListAPI} from "@/apis/cart.js";
+import {addCartAPI, changeCartGoodsAPI, deleteCartAPI, getCartListAPI, margeCartListAPI} from "@/apis/cart.js";
 
 export const useCartStore = defineStore(
     'cart',
@@ -46,16 +46,16 @@ export const useCartStore = defineStore(
 
 
         let isAdding = false//防止重复添加 节流阀
-        const changeCount = async (skuId, count) => {
+        const changeCount = async (skuId,selected,count) => {
             if (userStore.isLogin) {
                 if (!isAdding) {
                     isAdding = true
-                    let changeCount = 0
-                    console.log('changeCount', skuId, count)
-                    let find = cartList.value.find(item => item.skuId === skuId)
-                    changeCount = count - find.count
-                    console.log('find.count', find.count)
-                    const res = await addCartAPI({skuId, count: changeCount})
+                    // let changeCount = 0
+                    // console.log('changeCount', skuId, count)
+                    // let find = cartList.value.find(item => item.skuId === skuId)
+                    // changeCount = count - find.count
+                    // console.log('find.count', find.count)
+                    const res = await changeCartGoodsAPI({selected,count}, skuId)
                     console.log('res', res)
                     await getCartList()
                     isAdding = false
@@ -96,11 +96,19 @@ export const useCartStore = defineStore(
             }
         }
 
-        const setGoodsSelected = (id, selected) => {
-            const find = cartList.value.find(item => item.id === id)
-            if (find) {
-                // console.log('selected', selected)
-                find.selected = selected
+        const setGoodsSelected = async (skuId, selected) => {
+           if (userStore.isLogin) {
+               const res = await changeCartGoodsAPI({selected}, skuId)
+                console.log('setGoodsSelected', res)
+                getCartList()
+            }
+
+            else {
+                const find = cartList.value.find(item => item.skuId === skuId)
+                if (find) {
+                    // console.log('selected', selected)
+                    find.selected = selected
+                }
             }
         }
 

@@ -30,7 +30,7 @@ const throttleChangeCount = throttle(changeCount,500)
           <tbody>
           <tr v-for="i in cartStore.cartList" :key="i.id">
             <td>
-              <el-checkbox :model-value="i.selected" @update:model-value="cartStore.setGoodsSelected(i.id,$event)" />
+              <el-checkbox :model-value="i.selected" @update:model-value="cartStore.setGoodsSelected(i.skuId,$event)" />
             </td>
             <td>
               <div class="goods">
@@ -46,7 +46,7 @@ const throttleChangeCount = throttle(changeCount,500)
               <p>&yen;{{ i.price }}</p>
             </td>
             <td class="tc">
-              <el-input-number :min="1" :model-value="i.count"  @change="throttleChangeCount(i.skuId,$event)"/>
+              <el-input-number :min="1" :model-value="i.count"  @change="throttleChangeCount(i.skuId,i.selected,$event)"/>
             </td>
             <td class="tc">
               <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
