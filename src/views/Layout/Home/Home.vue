@@ -4,7 +4,7 @@ import HomeNew from './components/HomeNew.vue'
 import HomeHot from './components/HomeHot.vue'
 import HomeProduct from './components/HomeProduct.vue'
 import MainBanner from '@/views/Layout/comment/MainBanner.vue';
-import {useLayoutStore} from '@/stores/Layout.js';
+import {useLayoutStore} from '@/stores/layoutStore.js';
 const layoutStore = useLayoutStore()
 </script>
 

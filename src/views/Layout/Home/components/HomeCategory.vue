@@ -1,5 +1,5 @@
 <script setup>
-import {useLayoutStore} from '@/stores/Layout.js';
+import {useLayoutStore} from '@/stores/layoutStore.js';
 const layoutStore =useLayoutStore()
 </script>
 

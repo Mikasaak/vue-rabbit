@@ -1,5 +1,5 @@
 <script setup>
-import {useLayoutStore} from '@/stores/Layout.js';
+import {useLayoutStore} from '@/stores/layoutStore.js';
 import HeaderCart from "@/views/Layout/components/HeaderCart.vue";
 
 const layoutStore = useLayoutStore();

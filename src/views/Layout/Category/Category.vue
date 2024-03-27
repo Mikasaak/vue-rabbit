@@ -3,7 +3,7 @@ import MainBanner from '@/views/Layout/comment/MainBanner.vue';
 import GoodsItem from '@/views/Layout/Home/comment/GoodsItem.vue';
 import {onBeforeRouteUpdate, useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
-import {useCategoryStore} from "@/stores/Category.js";
+import {useCategoryStore} from "@/stores/categoryStore.js";
 import {getTopCategoryAPI} from "@/apis/category.js";
 
 

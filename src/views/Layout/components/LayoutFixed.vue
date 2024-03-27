@@ -1,6 +1,6 @@
 <script setup>
 import {useScroll} from '@vueuse/core';
-import {useLayoutStore} from '@/stores/Layout.js';
+import {useLayoutStore} from '@/stores/layoutStore.js';
 const {y} = useScroll(window)
 const layoutStore = useLayoutStore();
 

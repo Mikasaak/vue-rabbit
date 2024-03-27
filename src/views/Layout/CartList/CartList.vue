@@ -1,7 +1,12 @@
 <script setup>
-import {useCartStore} from "@/stores/Cart.js";
+import {useCartStore} from "@/stores/cartStore.js";
 const cartStore = useCartStore()
+import {throttle} from 'lodash'
 
+
+const {changeCount} = useCartStore()
+
+const throttleChangeCount = throttle(changeCount,500)
 </script>
 
 <template>
@@ -41,14 +46,14 @@ const cartStore = useCartStore()
               <p>&yen;{{ i.price }}</p>
             </td>
             <td class="tc">
-              <el-input-number :min="1" :model-value="i.count"  @change="cartStore.changeCount(i.id,$event)"/>
+              <el-input-number :min="1" :model-value="i.count"  @change="throttleChangeCount(i.skuId,$event)"/>
             </td>
             <td class="tc">
               <p class="f16 red">&yen;{{ (i.price * i.count).toFixed(2) }}</p>
             </td>
             <td class="tc">
               <p>
-                <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="cartStore.deleteGoods(i.id)">
+                <el-popconfirm title="确认删除吗?" confirm-button-text="确认" cancel-button-text="取消" @confirm="cartStore.deleteGoods(i.skuId)">
                   <template #reference>
                     <a href="javascript:;">删除</a>
                   </template>
@@ -60,7 +65,7 @@ const cartStore = useCartStore()
             <td colspan="6">
               <div class="cart-none">
                 <el-empty description="购物车列表为空">
-                  <el-button type="primary">随便逛逛</el-button>
+                  <el-button type="primary" @click="$router.push('/')">随便逛逛</el-button>
                 </el-empty>
               </div>
             </td>
@@ -76,7 +81,7 @@ const cartStore = useCartStore()
           <span class="red">¥ {{ cartStore.selectGoodsTotalPrice.toFixed(2)||0.00 }} </span>
         </div>
         <div class="total">
-          <el-button size="large" type="primary" >下单结算</el-button>
+          <el-button size="large" type="primary" @click="$router.push('/checkout')">下单结算</el-button>
         </div>
       </div>
     </div>

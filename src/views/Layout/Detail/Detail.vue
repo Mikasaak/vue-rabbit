@@ -5,10 +5,12 @@ import {getGoodsDetailAPI} from '@/apis/detail.js'
 import DetailHot from "@/views/Layout/Detail/components/DetailHot.vue";
 import ImageView from "@/views/Layout/Detail/components/ImageView.vue";
 import XtxGoodSku from "@/components/XtxSku/index.vue";
-import {useCartStore} from "@/stores/Cart.js";
+import {useCartStore} from "@/stores/cartStore.js";
 import {ElMessage} from "element-plus";
+import {useUserStore} from "@/stores/useStorer.js";
 
 const cartStore = useCartStore()
+const userStore = useUserStore()
 const route = useRoute()
 const goodsDetail = ref({})
 
@@ -48,6 +50,10 @@ const addCart = ()=>{
     ElMessage.warning("请选择规格")
     console.log("请选择sku")
   }else {
+    // if (!userStore.isLogin) {
+    //   ElMessage.error("请先登录")
+    //   return
+    // }
     cartStore.addCart({
       id: goodsDetail.value.id,//商品id
       name: goodsDetail.value.name,//商品名称/

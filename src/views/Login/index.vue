@@ -3,7 +3,7 @@ import 'element-plus/theme-chalk/el-message.css'
 import {ElMessage} from "element-plus";
 
 import { ref } from 'vue'
-import {useUserStore} from "@/stores/User.js";
+import {useUserStore} from "@/stores/useStorer.js";
 import {useRouter} from "vue-router";
 
 const form = ref({

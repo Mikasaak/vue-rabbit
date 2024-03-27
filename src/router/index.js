@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router';
+import {useUserStore} from "@/stores/useStorer.js";
 
 const router = createRouter({
     // history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,10 @@ const router = createRouter({
                 {
                     path: 'cartlist',
                     component: () => import('@/views/Layout/CartList/CartList.vue'),
+                },
+                {
+                    path:'checkout',
+                    component: () => import('@/views/Layout/Checkout/Checkout.vue'),
                 }
             ],
 
@@ -47,5 +52,12 @@ const router = createRouter({
         return {top: 0};
     }
 });
+// const blackList = ['/cartlist'];
+// router.beforeEach((to) => {
+//     const userStore = useUserStore();
+//     if (blackList.includes(to.path) && !userStore.isLogin) {
+//         return '/login';
+//     }
+// });
 
 export default router;
