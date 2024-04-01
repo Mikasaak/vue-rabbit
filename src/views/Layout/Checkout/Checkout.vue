@@ -1,17 +1,49 @@
 <script setup>
-import {ref} from 'vue'
+import {watch, ref} from 'vue'
 import {useCheckoutStore} from "@/stores/checkoutStore.js";
 import {storeToRefs} from 'pinia'
-
+import {createOrderAPI} from "@/apis/checkout.js";
+import {useRouter} from "vue-router";
+import {useCartStore} from "@/stores/cartStore.js";
+const cartStore = useCartStore();
 const checkoutStore = useCheckoutStore();
 checkoutStore.getCheckoutInfo()
-const {checkInfo, curAddress} = storeToRefs(checkoutStore)
-const {changeDefaultAddress} = useCheckoutStore()
+
+const {checkInfo, defaultAddress} = storeToRefs(checkoutStore)
+const router = useRouter()
 
 
 const toggleFlag = ref(false)
-const tempAddress = ref(curAddress.value)
+const tempAddress = ref({})
+const curAddress = ref({})
+watch(()=>defaultAddress.value, (val) => {
+  curAddress.value = val
+})
 
+
+const createOrder = async () => {
+  const res = await createOrderAPI({
+    deliveryTimeType: 1,
+    payType: 1,
+    payChannel: 1,
+    buyerMessage: '',
+    goods: checkInfo.value.goods.map(item => {
+      return {
+        skuId: item.skuId,
+        count: item.count
+      }
+    }),
+    addressId: curAddress.value.id
+  })
+  const orderId = res.data.result.id
+  router.push({
+    path: '/pay',
+    query: {
+      id: orderId
+    }
+  })
+  cartStore.getCartList()
+}
 
 </script>
 
@@ -26,9 +58,9 @@ const tempAddress = ref(curAddress.value)
             <div class="text">
               <div class="none" v-if="!curAddress">您需要先添加收货地址才可提交订单。</div>
               <ul v-else>
-                <li><span>收<i/>货<i/>人：</span>{{ curAddress.receiver }}</li>
-                <li><span>联系方式：</span>{{ curAddress.contact }}</li>
-                <li><span>收货地址：</span>{{ curAddress.fullLocation }} {{ curAddress.address }}</li>
+                <li><span>收<i/>货<i/>人：</span>{{ curAddress?.receiver }}</li>
+                <li><span>联系方式：</span>{{ curAddress?.contact }}</li>
+                <li><span>收货地址：</span>{{ curAddress?.fullLocation }} {{ curAddress?.address }}</li>
               </ul>
             </div>
             <div class="action">
@@ -107,7 +139,7 @@ const tempAddress = ref(curAddress.value)
         </div>
         <!-- 提交订单 -->
         <div class="submit">
-          <el-button type="primary" size="large">提交订单</el-button>
+          <el-button type="primary" size="large" @click="createOrder">提交订单</el-button>
         </div>
       </div>
     </div>
@@ -128,12 +160,15 @@ const tempAddress = ref(curAddress.value)
     </div>
     <template #footer>
     <span class="dialog-footer">
-      <el-button>取消</el-button>
-      <el-button type="primary" @click="()=>{changeDefaultAddress(tempAddress.id);toggleFlag=false}">确定</el-button>
+      <el-button @click="toggleFlag=false">取消</el-button>
+      <el-button type="primary" @click="()=>{curAddress=tempAddress;toggleFlag=false}">确定</el-button>
     </span>
     </template>
   </el-dialog>
   <!-- 添加地址 -->
+
+
+
 </template>
 
 <style scoped lang="scss">

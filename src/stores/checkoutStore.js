@@ -5,7 +5,7 @@ import {getCheckoutInfoAPI} from "@/apis/checkout.js";
 
 export const useCheckoutStore = defineStore('checkout', () => {
     const checkInfo = ref({})
-    const curAddress = computed(()=>{
+    const defaultAddress = computed(()=>{
         let address = checkInfo.value.userAddresses?.find(item => item.isDefault===0)
         return address || {}
     })
@@ -15,6 +15,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
     }
 
     const changeDefaultAddress = (addressId) => {
+
         checkInfo.value.userAddresses.forEach(item => {
             if(item.id === addressId){
                 item.isDefault = 0
@@ -27,7 +28,7 @@ export const useCheckoutStore = defineStore('checkout', () => {
 
     return {
         checkInfo,
-        curAddress,
+        defaultAddress,
         getCheckoutInfo,
         changeDefaultAddress
     }
